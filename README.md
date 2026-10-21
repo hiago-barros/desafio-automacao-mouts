@@ -7,31 +7,33 @@ Testes de frontend e de API do [ServeRest](https://serverest.dev/) com Cypress e
 | Frontend | https://front.serverest.dev/ |
 | API | https://serverest.dev/ |
 
-É preciso ter o Node.js 18 ou superior instalado.
+## Pré-requisito
+
+Node.js 18 ou superior.
 
 ## Como rodar
 
-Na pasta do projeto:
+**1. Instalar**
 
 ```bash
 npm install
 ```
 
-Modo interativo, para escolher o teste e ver o passo a passo:
+**2. Abrir o Cypress e escolher o teste**
 
 ```bash
 npx cypress open
 ```
 
-No aplicativo, escolha **E2E Testing**, o navegador e o spec.
+No aplicativo: **E2E Testing**, depois o navegador e o spec.
 
-Pelo terminal:
+**3. Ou rodar pelo terminal**
 
-```bash
-npm test          # frontend e API
-npm run test:ui   # só frontend
-npm run test:api  # só API
-```
+| Comando | O que executa |
+| --- | --- |
+| `npm test` | Frontend e API |
+| `npm run test:ui` | Só frontend |
+| `npm run test:api` | Só API |
 
 O relatório HTML fica em `cypress/reports`.
 
@@ -39,28 +41,62 @@ O relatório HTML fica em `cypress/reports`.
 
 ### Frontend
 
-| Spec | Validação |
-| --- | --- |
-| `cypress/e2e/frontend/cadastro-usuario.cy.js` | Cadastro de um usuário comum. Confere o alerta "Cadastro realizado com sucesso", a entrada em `/home` e o retorno a `/login` depois do logout. |
-| `cypress/e2e/frontend/login.cy.js` | Login com e-mail inexistente. A API responde 401, a tela exibe "Email e/ou senha inválidos" e o usuário permanece em `/login`. |
-| `cypress/e2e/frontend/lista-de-compras.cy.js` | Pesquisa de um produto, inclusão na lista e aumento da quantidade. Confere nome, preço e total (1 e depois 2) e a mensagem "Seu carrinho está vazio" ao limpar a lista. |
+**Cadastro de usuário**  
+`cypress/e2e/frontend/cadastro-usuario.cy.js`
+
+- Exibe o alerta "Cadastro realizado com sucesso"
+- Entra em `/home`
+- No logout, volta para `/login`
+
+**Login inválido**  
+`cypress/e2e/frontend/login.cy.js`
+
+- A API responde 401
+- A tela exibe "Email e/ou senha inválidos"
+- O usuário permanece em `/login`
+
+**Lista de compras**  
+`cypress/e2e/frontend/lista-de-compras.cy.js`
+
+- Pesquisa o produto e adiciona à lista
+- Confere nome, preço e quantidade 1
+- Ao aumentar a quantidade, confere o total 2
+- Ao limpar a lista, exibe "Seu carrinho está vazio"
 
 ### API
 
-| Spec | Validação |
-| --- | --- |
-| `cypress/e2e/api/carrinhos.cy.js` | Criação de um carrinho com 2 unidades. Confere preço total, quantidade, baixa do estoque e devolução dessa quantidade ao cancelar a compra. |
-| `cypress/e2e/api/produtos.cy.js` | Administrador cadastra e consulta o produto. Nome repetido retorna 400, usuário comum recebe 403 e, depois da exclusão, a consulta retorna "Produto não encontrado". |
-| `cypress/e2e/api/usuarios.cy.js` | Cadastro, consulta dos dados e login com token Bearer. E-mail repetido retorna 400 e, depois da exclusão, a consulta retorna "Usuário não encontrado". |
+**Carrinhos**  
+`cypress/e2e/api/carrinhos.cy.js`
+
+- Cria um carrinho com 2 unidades
+- Confere preço total e quantidade
+- Confere a baixa do estoque
+- Ao cancelar a compra, devolve a quantidade ao estoque
+
+**Produtos**  
+`cypress/e2e/api/produtos.cy.js`
+
+- Administrador cadastra e consulta o produto
+- Nome repetido retorna 400
+- Usuário comum recebe 403
+- Depois da exclusão, a consulta retorna "Produto não encontrado"
+
+**Usuários**  
+`cypress/e2e/api/usuarios.cy.js`
+
+- Cadastra o usuário e consulta os dados
+- Login devolve token Bearer
+- E-mail repetido retorna 400
+- Depois da exclusão, a consulta retorna "Usuário não encontrado"
 
 ## Organização
 
-```text
-cypress/e2e/frontend     cenários da interface
-cypress/e2e/api          cenários da API
-cypress/support/pages    Page Objects
-cypress/support/services chamadas de API
-cypress/support/factories dados gerados a cada execução
-```
+| Pasta | Conteúdo |
+| --- | --- |
+| `cypress/e2e/frontend` | Cenários da interface |
+| `cypress/e2e/api` | Cenários da API |
+| `cypress/support/pages` | Page Objects |
+| `cypress/support/services` | Chamadas de API |
+| `cypress/support/factories` | Dados gerados a cada execução |
 
 Os seletores ficam nos Page Objects. Cada execução cria e-mail e produto novos e apaga o que cadastrou ao final.
