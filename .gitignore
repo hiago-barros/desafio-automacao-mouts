@@ -1,0 +1,10 @@
+node_modules/
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+cypress/reports/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
